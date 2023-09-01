@@ -1,37 +1,36 @@
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
         int V = graph.length;
-        HashMap<Integer, List<Integer>> adj = new  HashMap<>();
-        int[] inDeg = new int[V];
-        for(int u=0; u<graph.length; u++){
-            for(int i=0; i<graph[u].length; i++){
-                int v = graph[u][i];
 
-                adj.computeIfAbsent(v, y-> new ArrayList<>()).add(u);
-                inDeg[u]++;
-            }
+        boolean[] vis = new boolean[V];
+        boolean[] inRec = new boolean[V];
+
+        for(int u=0; u<V; u++){
+            if(!vis[u])
+                dfs(u, vis, inRec, graph);
         }
 
-        Queue<Integer> q = new ArrayDeque<>();
         List<Integer> res = new ArrayList<>();
-
         for(int u=0; u<V; u++)
-            if(inDeg[u] == 0)
-                q.offer(u);
-
-        while(!q.isEmpty()){
-            int u = q.poll();
-            res.add(u);
-
-            for(int v : adj.getOrDefault(u, new ArrayList<>())){
-                inDeg[v]--;
-                if(inDeg[v] == 0)
-                    q.offer(v);
-            }
-        }
-
-        Collections.sort(res);
+            if(!inRec[u])
+                res.add(u);
 
         return res;
+    }
+    public boolean dfs(int u, boolean[] vis, boolean[] inRec, int[][] graph){
+        vis[u] = true;
+        inRec[u] = true;
+
+        for(int v : graph[u]){
+            if(!vis[v] && dfs(v, vis, inRec, graph))
+                return true;
+
+            else if(inRec[v])
+                return true;
+
+        }
+
+        inRec[u] = false;
+        return false;
     }
 }
