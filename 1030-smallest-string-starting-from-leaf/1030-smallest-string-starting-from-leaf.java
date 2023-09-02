@@ -26,8 +26,6 @@ class Solution {
         String left = preOrder(root.left, rootCh + str);
         String right = preOrder(root.right, rootCh + str);
 
-        // System.out.println(rootCh + " " + left + " " + right); 
-
         if(root.right == null && root.left == null)
             return rootCh + str;
         if(root.left == null)
@@ -35,38 +33,9 @@ class Solution {
         if(root.right == null)
             return left;
 
-        
-
-        if(left.equals(""))
-            return right;
-        else if(right.equals(""))
+        if(left.compareTo(right) < 0)
             return left;
-        else{
-            if(left.compareTo(right) < 0)
-                return left;
-            else
-                return right;
-            // if(left.length() < right.length())
-            //     return left;
-            // else if(left.length() > right.length())
-            //     return right;
-            // else{
-                
-            // }
-        }
-
-        
-
-        // if(left.length() < right.length())
-        //     return left + str;
-        // if(right.length() < left.length())
-        //     return right + str;
-
-        // if(left.compareTo(right) <= 0)
-        //     str = left + str;
-        // else
-        //     str = right + str;
-        
-        // return str;
+        else
+            return right;
     }
 }
