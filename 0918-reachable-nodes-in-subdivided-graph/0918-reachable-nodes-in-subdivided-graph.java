@@ -6,19 +6,22 @@ class Pair{
     }
 }
 class Solution {
-    HashMap<Integer, HashMap<Integer, Integer>> adj;
+    int[][] adj;
     int n;
     public int reachableNodes(int[][] edges, int maxMoves, int n) {
-        this.adj = new HashMap<>();
+        this.adj = new int[n][n];
         this.n = n;
+
+        for(int[] row : adj)
+            Arrays.fill(row, -1);
 
         for(int[] edge : edges){
             int u = edge[0];
             int v = edge[1];
             int cnt = edge[2];
 
-            adj.computeIfAbsent(u, y -> new HashMap<>()).put(v, cnt);
-            adj.computeIfAbsent(v, y -> new HashMap<>()).put(u, cnt);
+            adj[u][v] = cnt;
+            adj[v][u] = cnt;
         }
 
         PriorityQueue<Pair> pq = new PriorityQueue<>(
@@ -39,22 +42,21 @@ class Solution {
             res++;
             vis[u] = true;
 
-            HashMap<Integer, Integer> map = adj.getOrDefault(u, new HashMap<>());
-
-            for(Map.Entry<Integer, Integer> e : map.entrySet()){
-                int v = e.getKey(), cnt = e.getValue();
-
-                System.out.println(u + " " + v);
+            for(int v=0; v<n; v++){
+                if(adj[u][v] == -1)
+                    continue;
+                    
+                int cnt = adj[u][v];
 
                 if(!vis[v] && cnt < remCnt)
                     pq.offer(new Pair(v, remCnt - cnt - 1));
 
-                int val = Math.min(cnt, remCnt);
+                int minCost = Math.min(cnt, remCnt);
 
-                adj.get(u).put(v, adj.get(u).get(v) - val);
-                adj.get(v).put(u, adj.get(v).get(u) - val);
+                adj[u][v] -= minCost;
+                adj[v][u] -= minCost;
 
-                res += val;
+                res += minCost;
             }
         }
 
