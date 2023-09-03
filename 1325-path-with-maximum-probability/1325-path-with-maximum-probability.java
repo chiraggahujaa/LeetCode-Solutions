@@ -37,6 +37,9 @@ class Solution {
             int u = p.u;
             double prob1 = p.prob;
 
+            if(u == end_node)
+                return res[u];
+
             for(Pair p2 : adj.getOrDefault(u, new ArrayList<>())){
                 int v = p2.u;
                 double prob2 = p2.prob;
