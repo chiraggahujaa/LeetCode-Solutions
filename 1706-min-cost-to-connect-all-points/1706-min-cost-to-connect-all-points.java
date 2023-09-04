@@ -1,47 +1,67 @@
-class Pair{
-    int u, wt;
-    Pair(int u, int wt){
-        this.u = u;
-        this.wt = wt;
+class UnionFind{
+    int[] parent, rank;
+
+    UnionFind(int n){
+        this.parent = new int[n+1];
+        this.rank = new int[n+1];
+
+        for(int i=0; i<=n; i++)
+            parent[i] = i;
     }
-    public String toString(){
-        return "("+u+" "+wt+")";
+
+    public int find(int i){
+        if(i == parent[i])
+            return i;
+        
+        return parent[i] = find(parent[i]);
+    }
+    public void union(int a, int b){
+        int aPar = find(a);
+        int bPar = find(b);
+        
+        if(aPar == bPar) return;
+        
+        if(rank[aPar] > rank[bPar])
+            parent[bPar] = aPar;
+        else if(rank[aPar] < rank[bPar])
+            parent[aPar] = bPar;
+        else{
+            parent[bPar] = aPar;
+            rank[aPar]++;
+        }
     }
 }
 class Solution {
     public int minCostConnectPoints(int[][] points) {
         int n = points.length;
-        HashMap<Integer, List<Pair>> adj = new HashMap<>();
+        List<int[]> edges = new ArrayList<>();
 
         for(int u=0; u<n; u++){
             for(int v=u+1; v<n; v++){
                 int wt = Math.abs(points[u][0] - points[v][0]) + Math.abs(points[u][1] - points[v][1]);
 
-                adj.computeIfAbsent(u, y -> new ArrayList<>()).add(new Pair(v, wt));
-                adj.computeIfAbsent(v, y -> new ArrayList<>()).add(new Pair(u, wt));
+                int[] edge = new int[3];
+                edge[0] = u;
+                edge[1] = v;
+                edge[2] = wt;
+
+                edges.add(edge);
             }
         }
 
-        PriorityQueue<Pair> pq = new PriorityQueue<>(
-            (a,b) -> a.wt - b.wt
-        );
-        boolean[] vis = new boolean[n];
+        Collections.sort(edges, (a,b) -> a[2] - b[2]);
 
-        pq.offer(new Pair(0, 0));
+        UnionFind uf = new UnionFind(n);
         int res = 0;
+        for(int[] edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
 
-        while(!pq.isEmpty()){
-            Pair p1 = pq.poll();
-            int u = p1.u, wt1 = p1.wt;
-
-            if(vis[u])
-                continue;
-            
-            vis[u] = true;
-            res += wt1;
-
-            for(Pair p2 : adj.getOrDefault(u, new ArrayList<>()))
-                pq.offer(p2);
+            if(uf.find(u) != uf.find(v)){
+                uf.union(u,v);
+                res += wt;
+            }
         }
 
         return res;
