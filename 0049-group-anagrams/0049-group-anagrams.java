@@ -10,11 +10,6 @@ class Solution {
             map.computeIfAbsent(str, y -> new ArrayList<>()).add(strs[i]);
         }
 
-        List<List<String>> res = new ArrayList<>();
-        for(Map.Entry<String, List<String>> e : map.entrySet()){
-            res.add(e.getValue());
-        }
-
-        return res;
+        return new ArrayList<>(map.values());
     }
 }
