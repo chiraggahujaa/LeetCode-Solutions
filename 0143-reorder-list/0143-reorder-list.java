@@ -1,39 +1,29 @@
 class Solution {
     public void reorderList(ListNode head) {
-        List<ListNode> list = new ArrayList<>();
-        while(head != null){
-            list.add(head);
-            head = head.next;
+        HashMap<ListNode, ListNode> map = new HashMap<>();
+        ListNode curr = head, prev = null;
+        while(curr != null){
+            map.put(curr, prev);
+
+            prev = curr;
+            curr = curr.next;
         }
 
-        int i = 0, j = list.size()-1;
-        ListNode h = null, t = null;
-        boolean isEven = true;
-
-        while(i <= j){
-            
-            ListNode node;
-            if(isEven){
-                node = list.get(i);
-                isEven = !isEven;
-                i++;
+        ListNode n1 = head, n2 = prev;
+        boolean flag = true;
+        while(n1 != n2){
+            if(flag){
+                ListNode temp = n1.next;
+                n1.next = n2;
+                n1 = temp;
+                flag = !flag;
             }else{
-                node = list.get(j);
-                isEven = !isEven;
-                j--;
-            }
-
-            if(h == null){
-                h = node;
-                t = node;
-            }
-            else{
-                t.next = node;
-                t = node;
+                n2.next = n1;
+                n2 = map.get(n2);
+                flag = !flag;
             }
         }
 
-        t.next = null;
-        head = h;
+        n1.next = null;
     }
 }
