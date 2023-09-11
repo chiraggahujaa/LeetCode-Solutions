@@ -34,36 +34,31 @@ class UnionFind{
 class Solution {
     public int minCostConnectPoints(int[][] points) {
         int n = points.length;
+
         List<int[]> edges = new ArrayList<>();
-
-        for(int u=0; u<n; u++){
-            for(int v=u+1; v<n; v++){
-                int wt = Math.abs(points[u][0] - points[v][0]) + Math.abs(points[u][1] - points[v][1]);
-
-                int[] edge = new int[3];
-                edge[0] = u;
-                edge[1] = v;
-                edge[2] = wt;
-
-                edges.add(edge);
+        for(int i=0; i<n; i++){
+            for(int j=i+1; j<n; j++){
+                int dis = Math.abs(points[i][0] - points[j][0]) + Math.abs(points[i][1] - points[j][1]);
+                edges.add(new int[]{i, j, dis});
             }
         }
 
         Collections.sort(edges, (a,b) -> a[2] - b[2]);
 
         UnionFind uf = new UnionFind(n);
-        int res = 0;
+        int cost = 0;
+
         for(int[] edge : edges){
             int u = edge[0];
             int v = edge[1];
-            int wt = edge[2];
+            int dis = edge[2];
 
             if(uf.find(u) != uf.find(v)){
                 uf.union(u,v);
-                res += wt;
+                cost += dis;
             }
         }
 
-        return res;
+        return cost;
     }
 }
