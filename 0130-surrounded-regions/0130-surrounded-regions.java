@@ -11,22 +11,20 @@ class Solution {
         // don't capture unsurrounded region
 
         // what's unsurrounded region ->
-        // every on the borded and everything connected to it for the value 'O'.
-
-        boolean[][] vis = new boolean[n][m];        
+        // every on the borded and everything connected to it for the value 'O'. 
 
         // traverse through the border and run dfs on the cell with value 'O' and make all these cells to 'T'.
         for(int i=0; i<n; i++){
-            if(!vis[i][0] && board[i][0] == 'O')
-                dfs(i, 0, vis, board);
-            if(!vis[i][m-1] && board[i][m-1] == 'O')
-                dfs(i, m-1, vis, board);
+            if(board[i][0] == 'O')
+                dfs(i, 0, board);
+            if(board[i][m-1] == 'O')
+                dfs(i, m-1, board);
         }
         for(int j=0; j<m; j++){
-            if(!vis[0][j] && board[0][j] == 'O')
-                dfs(0, j, vis, board);
-            if(!vis[n-1][j] && board[n-1][j] == 'O')
-                dfs(n-1, j, vis, board);
+            if(board[0][j] == 'O')
+                dfs(0, j, board);
+            if(board[n-1][j] == 'O')
+                dfs(n-1, j, board);
         }
 
         // at end, traverse and make left 'O' to 'X'.
@@ -39,16 +37,15 @@ class Solution {
             }
         }
     }
-    public void dfs(int i, int j, boolean[][] vis, char[][] board){
-        vis[i][j] = true;
+    public void dfs(int i, int j, char[][] board){
         board[i][j] = 'T';
 
         for(int[] moveTo : moves){
             int ii = i + moveTo[0];
             int jj = j + moveTo[1];
 
-            if(isValid(ii, jj) && !vis[ii][jj] && board[ii][jj] == 'O')
-                dfs(ii, jj, vis, board);
+            if(isValid(ii, jj) && board[ii][jj] == 'O')
+                dfs(ii, jj, board);
         }
     }
     public boolean isValid(int i, int j){
