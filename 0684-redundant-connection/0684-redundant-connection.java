@@ -35,16 +35,16 @@ class Solution {
     public int[] findRedundantConnection(int[][] edges) {
         int n = edges.length;
         UnionFind uf = new UnionFind(n);
-
         int[] res = new int[2];
+        
         for(int[] edge : edges){
-            int u = edge[0], v = edge[1];
+            int u = edge[0];
+            int v = edge[1];
 
             if(uf.find(u) == uf.find(v)){
                 res[0] = u;
                 res[1] = v;
-            }
-            else{
+            }else{
                 uf.union(u,v);
             }
         }
