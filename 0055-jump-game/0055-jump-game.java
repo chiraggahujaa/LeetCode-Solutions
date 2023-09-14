@@ -1,29 +1,13 @@
 class Solution {
-    int n;
-    int[] dp;
     public boolean canJump(int[] nums) {
-        this.n = nums.length;
-        this.dp = new int[n];
-        Arrays.fill(dp, -1);
-
-        return f(0, nums);
-    }
-
-    public boolean f(int i, int[] nums){
-        if(i >= n-1)
-            return true;
-
-        if(dp[i] != -1)
-            return dp[i] == 1;
-
-        for(int jump=1; jump<=nums[i]; jump++){
-            if(f(i+jump, nums)){
-                dp[i] = 1;
-                return true;
-            }
+        int n = nums.length;
+        
+        int goal = n-1;
+        for(int i=n-1; i>=0; i--){
+            if(i + nums[i] >= goal)
+                goal = i;
         }
 
-        dp[i] = 0;
-        return false;
+        return goal == 0;        
     }
 }
