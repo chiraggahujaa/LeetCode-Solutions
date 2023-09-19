@@ -4,16 +4,14 @@ class Solution {
         do{
             slow = nums[slow];
             fast = nums[nums[fast]];
-        } while(slow != fast);
-
-        System.out.println(slow + " " + fast);
+        }while(slow != fast);
 
         slow = 0;
-        while(slow != fast){
+        do{
             slow = nums[slow];
             fast = nums[fast];
-        }
+        }while(slow != fast);
 
-        return fast;
+        return slow;
     }
 }
