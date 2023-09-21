@@ -8,14 +8,6 @@ class Solution {
 
         if(target == 0) return n;
         
-        int len = longestSubarrayLen(nums, target);
-
-        if(len == Integer.MIN_VALUE)
-            return -1;
-        
-        return nums.length - len;
-    }
-    public int longestSubarrayLen(int[] nums, int target){
         HashMap<Integer, Integer> map = new HashMap<>();
         map.put(0, -1);
         int res = Integer.MIN_VALUE;
@@ -29,6 +21,9 @@ class Solution {
             map.put(pre, i);
         }
 
-        return res;
+        if(res == Integer.MIN_VALUE)
+            return -1;
+        
+        return nums.length - res;
     }
 }
