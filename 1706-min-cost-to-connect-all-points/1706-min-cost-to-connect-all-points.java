@@ -1,45 +1,53 @@
 class UnionFind{
+    int n;
     int[] parent, rank;
-
     UnionFind(int n){
-        this.parent = new int[n+1];
-        this.rank = new int[n+1];
-
-        for(int i=0; i<=n; i++)
+        this.n = n;
+        this.parent = new int[n];
+        this.rank = new int[n];
+        
+        for(int i=0; i<n; i++)
             parent[i] = i;
     }
 
-    public int find(int i){
-        if(i == parent[i])
-            return i;
-        
-        return parent[i] = find(parent[i]);
+    public int find(int u){
+        if(u == parent[u])
+            return u;
+        return parent[u] = find(parent[u]);
     }
-    public void union(int a, int b){
-        int aPar = find(a);
-        int bPar = find(b);
-        
-        if(aPar == bPar) return;
-        
-        if(rank[aPar] > rank[bPar])
-            parent[bPar] = aPar;
-        else if(rank[aPar] < rank[bPar])
-            parent[aPar] = bPar;
+
+    public void union(int u, int v){
+        int uPar = find(u);
+        int vPar = find(v);
+
+        if(uPar == vPar)
+            return;
+
+        if(rank[uPar] > rank[vPar])
+            parent[vPar] = uPar;
+        else if(rank[uPar] < rank[vPar])
+            parent[uPar] = vPar;
         else{
-            parent[bPar] = aPar;
-            rank[aPar]++;
+            parent[vPar] = uPar;
+            rank[uPar]++;
         }
     }
 }
 class Solution {
     public int minCostConnectPoints(int[][] points) {
         int n = points.length;
-
         List<int[]> edges = new ArrayList<>();
+
         for(int i=0; i<n; i++){
             for(int j=i+1; j<n; j++){
                 int dis = Math.abs(points[i][0] - points[j][0]) + Math.abs(points[i][1] - points[j][1]);
-                edges.add(new int[]{i, j, dis});
+
+                int[] temp = new int[3];
+                temp[0] = i;
+                temp[1] = j;
+                temp[2] = dis;
+
+                edges.add(temp);
             }
         }
 
@@ -49,12 +57,10 @@ class Solution {
         int cost = 0;
 
         for(int[] edge : edges){
-            int u = edge[0];
-            int v = edge[1];
-            int dis = edge[2];
-
+            int u = edge[0], v = edge[1], dis = edge[2];
+            
             if(uf.find(u) != uf.find(v)){
-                uf.union(u,v);
+                uf.union(u, v);
                 cost += dis;
             }
         }
