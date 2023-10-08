@@ -7,8 +7,6 @@ class Solution {
             arr[i] = intervals[i];
         arr[n] = newInterval;
 
-        Arrays.sort(arr, (a,b) -> a[0] - b[0]);
-
         return merge(arr);
     }
     public int[][] merge(int[][] intervals) {
